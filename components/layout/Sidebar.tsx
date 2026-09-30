@@ -2,9 +2,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 border-r bg-white">
       <div className="flex h-16 items-center border-b px-6">
-        <h1 className="font-semibold">
-          Incident Assistant
-        </h1>
+        <h1 className="font-semibold">Incident Assistant</h1>
       </div>
 
       <nav className="p-4">
