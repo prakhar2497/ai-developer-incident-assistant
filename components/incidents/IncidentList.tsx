@@ -2,12 +2,43 @@
 
 import { useEffect, useState } from "react";
 import IncidentCard from "./IncidentCard";
-import type { Incident } from "../../types/incident.types";
+import type { Incident, IncidentStatus } from "../../types/incident.types";
 
 export default function IncidentList() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleStatusChange = async (
+    incidentId: string,
+    status: IncidentStatus,
+  ) => {
+    try {
+      const response = await fetch(`/api/incidents/${incidentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update incident status");
+      }
+
+      const updatedIncident: Incident = await response.json();
+
+      setIncidents((currentIncidents) =>
+        currentIncidents.map((incident) =>
+          incident.id === updatedIncident.id ? updatedIncident : incident,
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to update incident status:", error);
+    }
+  };
 
   useEffect(() => {
     async function fetchIncidents() {
@@ -47,7 +78,11 @@ export default function IncidentList() {
   return (
     <div className="space-y-4">
       {incidents.map((incident) => (
-        <IncidentCard key={incident.id} incident={incident} />
+        <IncidentCard
+          key={incident.id}
+          incident={incident}
+          onStatusChange={(status) => handleStatusChange(incident.id, status)}
+        />
       ))}
     </div>
   );
