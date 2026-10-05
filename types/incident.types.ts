@@ -1,5 +1,3 @@
-export type IncidentStatus = "NEW" | "INVESTIGATING" | "RESOLVED";
-
 export type IncidentSeverity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
 export interface Incident {
@@ -11,3 +9,7 @@ export interface Incident {
   severity: IncidentSeverity;
   createdAt: string;
 }
+
+export const INCIDENT_STATUSES = ["NEW", "INVESTIGATING", "RESOLVED"] as const;
+
+export type IncidentStatus = (typeof INCIDENT_STATUSES)[number];
