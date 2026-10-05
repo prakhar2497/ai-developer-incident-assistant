@@ -1,4 +1,4 @@
-import type { IncidentSeverity } from "./incident.types";
+import type { IncidentSeverity } from "../../types/incident.types";
 
 interface SeverityBadgeProps {
   severity: IncidentSeverity;

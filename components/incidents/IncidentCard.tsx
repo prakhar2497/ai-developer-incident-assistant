@@ -1,5 +1,5 @@
 import { SeverityBadge } from "./SeverityBadge";
-import type { Incident } from "./incident.types";
+import type { Incident } from "../../types/incident.types";
 
 interface IncidentCardProps {
   incident: Incident;
