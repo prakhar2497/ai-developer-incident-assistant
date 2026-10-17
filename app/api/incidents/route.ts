@@ -25,25 +25,33 @@ export async function POST(request: Request) {
       );
     }
 
-    const incidentId = randomUUID();
+    const isGitHubIssue = body.source === "github";
+
+    const incidentId = isGitHubIssue
+      ? `github-${body.repository}-${body.issueNumber}`
+      : randomUUID();
+
+    const pk = isGitHubIssue
+      ? `GITHUB#${body.repository}#${body.issueNumber}`
+      : `INCIDENT#${incidentId}`;
+
     const now = new Date().toISOString();
 
     const incident = {
-      PK: `INCIDENT#${incidentId}`,
-
+      PK: pk,
       GSI1PK: "INCIDENT",
       GSI1SK: `${now}#${incidentId}`,
-
       id: incidentId,
-
       title: body.title,
       description: body.description,
       repository: body.repository,
       issueNumber: body.issueNumber,
-
+      issueUrl: body.issueUrl,
+      source: body.source ?? "manual",
+      githubIssueId: body.githubIssueId,
+      deliveryId: body.deliveryId,
       status: "NEW",
       severity: body.severity ?? "MEDIUM",
-
       createdAt: now,
       updatedAt: now,
     };
@@ -52,11 +60,22 @@ export async function POST(request: Request) {
       new PutCommand({
         TableName: TABLE_NAME,
         Item: incident,
+        ConditionExpression: "attribute_not_exists(PK)",
       }),
     );
 
     return NextResponse.json(incident, { status: 201 });
   } catch (error) {
+    if (
+      error instanceof Error &&
+      error.name === "ConditionalCheckFailedException"
+    ) {
+      return NextResponse.json(
+        { error: "Incident already exists for this GitHub issue" },
+        { status: 409 },
+      );
+    }
+
     console.error("Failed to create incident:", error);
 
     return NextResponse.json(
