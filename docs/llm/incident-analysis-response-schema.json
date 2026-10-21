@@ -1,0 +1,24 @@
+
+{
+  "summary": "A concise summary of the incident",
+  "severity": "HIGH",
+  "observedFacts": [
+    "The issue reports HTTP 500 responses"
+  ],
+  "possibleCauses": [
+    {
+      "cause": "A regression introduced by a recent deployment",
+      "reasoning": "The report says the issue began after deployment",
+      "confidence": "MEDIUM"
+    }
+  ],
+  "recommendations": [
+    "Inspect the API error logs",
+    "Compare the latest deployment with the previous release",
+    "Reproduce the failure using representative inputs"
+  ],
+  "missingInformation": [
+    "Relevant stack traces",
+    "Number of affected users"
+  ]
+}
