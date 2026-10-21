@@ -1,0 +1,21 @@
+
+Analyze the following software incident.
+
+Incident title:
+{{title}}
+
+Incident description:
+{{description}}
+
+Repository:
+{{repository}}
+
+Issue number:
+{{issueNumber}}
+
+Issue URL:
+{{issueUrl}}
+
+Return a structured analysis using the required JSON contract.
+Use only the information provided. Identify missing information
+that would help confirm the cause and assess the impact.
